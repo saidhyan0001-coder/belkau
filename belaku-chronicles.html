@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>The Belaku Chronicles</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root{
+  --parchment:#EFE3C4;
+  --parchment-dark:#E1D1A4;
+  --ink:#2A1E12;
+  --burgundy:#6B1420;
+  --burgundy-deep:#4A0E17;
+  --green:#0F3D2E;
+  --navy:#101B33;
+  --gold:#C9A227;
+  --gold-bright:#E8C55A;
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'EB Garamond', serif;
+  background:
+    radial-gradient(ellipse at top, #1a1024 0%, #0a0710 55%, #060409 100%);
+  color:var(--parchment);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4,.display{
+  font-family:'Cinzel Decorative', 'Cinzel', serif;
+  letter-spacing:.5px;
+}
+.serif-head{font-family:'Cinzel', serif; letter-spacing:.5px;}
+
+/* ---------- particles ---------- */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+.mote{
+  position:absolute;
+  width:3px;height:3px;
+  border-radius:50%;
+  background:var(--gold-bright);
+  box-shadow:0 0 6px 2px rgba(232,197,90,.8);
+  opacity:.7;
+  animation:drift linear infinite;
+}
+@keyframes drift{
+  0%{transform:translateY(0) translateX(0); opacity:0;}
+  10%{opacity:.8;}
+  90%{opacity:.6;}
+  100%{transform:translateY(-110vh) translateX(20px); opacity:0;}
+}
+
+/* ---------- app shell ---------- */
+#app{position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column;}
+
+.hidden{display:none !important;}
+
+/* ---------- opening screen ---------- */
+#opening{
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  flex-direction:column; text-align:center; padding:24px;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(107,20,32,.35), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(15,61,46,.35), transparent 60%);
+}
+.crest{
+  font-size:54px; margin-bottom:18px;
+  filter:drop-shadow(0 0 18px rgba(232,197,90,.55));
+  animation:float 4s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+#opening h1{
+  font-size:clamp(30px,7vw,58px);
+  color:var(--gold-bright);
+  text-shadow:0 0 24px rgba(232,197,90,.35), 0 4px 0 rgba(0,0,0,.4);
+  margin:0 0 6px;
+}
+#opening .sub{
+  font-family:'Cinzel', serif; font-size:14px; letter-spacing:3px;
+  color:var(--parchment-dark); opacity:.85; margin-bottom:34px;
+}
+.typewriter{
+  font-family:'EB Garamond', serif; font-style:italic; font-size:clamp(17px,3vw,22px);
+  color:var(--parchment); max-width:520px; min-height:34px; margin-bottom:38px;
+  border-right:2px solid var(--gold); padding-right:6px; white-space:nowrap; overflow:hidden;
+  margin-left:auto;margin-right:auto;
+}
+.enter-btn{
+  font-family:'Cinzel', serif; letter-spacing:2px; font-size:15px;
+  background:linear-gradient(180deg,var(--gold-bright),var(--gold));
+  color:#2A1E12; border:none; padding:14px 34px; border-radius:2px;
+  cursor:pointer; box-shadow:0 6px 0 #8a6d16, var(--shadow);
+  transition:transform .15s ease;
+  opacity:0; animation:appear .8s ease forwards; animation-delay:2.6s;
+}
+.enter-btn:active{transform:translateY(4px); box-shadow:0 2px 0 #8a6d16;}
+@keyframes appear{to{opacity:1;}}
+
+/* ---------- top bar / great hall ---------- */
+header.hall{
+  padding:18px 20px 14px;
+  text-align:center;
+  border-bottom:2px solid var(--gold);
+  background:linear-gradient(180deg, rgba(16,27,51,.9), rgba(16,27,51,.4));
+  position:sticky; top:0; z-index:20;
+  backdrop-filter:blur(4px);
+}
+header.hall h1{
+  font-size:clamp(22px,5vw,34px); margin:0; color:var(--gold-bright);
+  text-shadow:0 0 14px rgba(232,197,90,.35);
+}
+header.hall .tag{font-family:'Cinzel',serif; font-size:11px; letter-spacing:3px; color:var(--parchment-dark); opacity:.8;}
+.role-badge{
+  position:absolute; right:16px; top:16px;
+  font-family:'Cinzel',serif; font-size:11px; letter-spacing:1px;
+  background:rgba(201,162,39,.15); border:1px solid var(--gold);
+  color:var(--gold-bright); padding:6px 10px; border-radius:20px; cursor:pointer;
+}
+
+main{flex:1; max-width:1100px; margin:0 auto; padding:26px 18px 100px; width:100%;}
+
+/* ---------- great hall dashboard tiles ---------- */
+.tiles{display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; margin-top:10px;}
+.tile{
+  background:
+    linear-gradient(180deg, rgba(239,227,196,.06), rgba(239,227,196,.02)),
+    var(--navy);
+  border:1px solid rgba(201,162,39,.4);
+  border-radius:4px; padding:22px 14px; text-align:center; cursor:pointer;
+  transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.tile:hover{transform:translateY(-4px); border-color:var(--gold-bright); box-shadow:0 10px 24px rgba(0,0,0,.5);}
+.tile .icon{font-size:32px; display:block; margin-bottom:10px;}
+.tile .label{font-family:'Cinzel',serif; font-size:14px; letter-spacing:.5px; color:var(--parchment);}
+
+/* ---------- section header ---------- */
+.section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px;}
+.section-head h2{font-size:clamp(22px,4vw,30px); color:var(--gold-bright); margin:0;}
+.back-link{font-family:'Cinzel',serif; font-size:12px; letter-spacing:1px; color:var(--parchment-dark); cursor:pointer; opacity:.8;}
+.back-link:hover{opacity:1; color:var(--gold-bright);}
+
+/* ---------- parchment card ---------- */
+.parchment{
+  background:
+    linear-gradient(180deg, rgba(239,227,196,.97), rgba(225,209,164,.97));
+  color:var(--ink);
+  border-radius:3px;
+  box-shadow:var(--shadow);
+  border:1px solid #b89a5a;
+  position:relative;
+}
+.parchment::before{
+  content:''; position:absolute; inset:6px; border:1px solid rgba(107,20,32,.25); pointer-events:none;
+}
+
+/* ---------- gallery ---------- */
+.gallery{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:18px;}
+.photo-card{
+  background:var(--navy); border:1px solid rgba(201,162,39,.35); border-radius:3px; overflow:hidden;
+  cursor:pointer; transition:transform .2s ease, box-shadow .2s ease;
+}
+.photo-card:hover{transform:rotate(-.6deg) translateY(-3px); box-shadow:var(--shadow);}
+.photo-card img{width:100%; height:170px; object-fit:cover; display:block; filter:sepia(.15) contrast(1.03);}
+.photo-card .meta{padding:10px 12px;}
+.photo-card .cel{font-family:'Cinzel',serif; font-size:13px; color:var(--gold-bright);}
+.photo-card .date{font-size:12px; color:var(--parchment-dark); opacity:.8; margin:2px 0 6px;}
+.photo-card .people{font-size:12px; font-style:italic; color:var(--parchment); opacity:.85;}
+.empty-state{
+  text-align:center; padding:60px 20px; font-style:italic; color:var(--parchment-dark); opacity:.85;
+  border:1px dashed rgba(201,162,39,.4); border-radius:4px;
+}
+
+/* ---------- modal / full screen viewer ---------- */
+.modal-back{position:fixed; inset:0; background:rgba(6,4,9,.88); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;}
+.modal-card{max-width:640px; width:100%; max-height:90vh; overflow:auto; border-radius:4px;}
+.modal-card img{width:100%; max-height:400px; object-fit:contain; background:#000;}
+.modal-body{padding:22px 24px 26px;}
+.modal-body h3{font-size:20px; color:var(--burgundy); margin:0 0 4px;}
+.modal-close{position:absolute; top:10px; right:16px; font-size:26px; color:var(--parchment-dark); cursor:pointer; z-index:5; background:rgba(0,0,0,.4); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;}
+
+/* ---------- forms ---------- */
+.form-wrap{padding:26px 24px 30px;}
+label{display:block; font-family:'Cinzel',serif; font-size:12px; letter-spacing:1px; color:var(--burgundy); margin:16px 0 6px;}
+label:first-child{margin-top:0;}
+input[type=text],input[type=date],textarea,select{
+  width:100%; padding:10px 12px; border:1px solid #b89a5a; border-radius:2px;
+  background:rgba(255,252,240,.8); font-family:'EB Garamond',serif; font-size:16px; color:var(--ink);
+}
+textarea{min-height:80px; resize:vertical;}
+.file-drop{
+  border:2px dashed #b89a5a; border-radius:4px; padding:22px; text-align:center; cursor:pointer;
+  background:rgba(255,252,240,.5); font-family:'Cinzel',serif; font-size:13px; color:var(--burgundy);
+}
+.file-drop:hover{background:rgba(255,252,240,.8);}
+.photo-stage{margin-top:14px; display:flex; flex-direction:column; gap:14px;}
+.stage-item{border:1px solid #b89a5a; border-radius:3px; padding:12px; display:flex; gap:12px; background:rgba(255,255,255,.35);}
+.stage-item img{width:84px; height:84px; object-fit:cover; border-radius:2px; flex-shrink:0;}
+.stage-item .stage-body{flex:1; min-width:0;}
+.stage-item .q{font-family:'Cinzel',serif; font-size:12px; color:var(--burgundy); margin-bottom:6px;}
+.chip-row{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;}
+.chip{
+  background:var(--burgundy); color:var(--parchment); font-size:12px; padding:4px 10px 4px 12px;
+  border-radius:20px; display:flex; align-items:center; gap:6px;
+}
+.chip button{background:none; border:none; color:var(--parchment); cursor:pointer; font-size:13px; padding:0;}
+.tag-input-row{display:flex; gap:6px;}
+.tag-input-row input{flex:1;}
+.suggest-list{position:relative;}
+.suggest-box{
+  position:absolute; z-index:5; background:#fffcf0; border:1px solid #b89a5a; width:100%; max-height:150px; overflow:auto; border-radius:0 0 3px 3px;
+}
+.suggest-box div{padding:8px 12px; cursor:pointer; font-size:14px;}
+.suggest-box div:hover{background:#eaddb0;}
+.btn{
+  font-family:'Cinzel',serif; letter-spacing:1px; font-size:13px;
+  background:var(--burgundy); color:var(--parchment); border:none; padding:10px 20px; border-radius:2px; cursor:pointer;
+  box-shadow:0 4px 0 var(--burgundy-deep);
+}
+.btn:active{transform:translateY(3px); box-shadow:0 1px 0 var(--burgundy-deep);}
+.btn.secondary{background:transparent; color:var(--burgundy); border:1px solid var(--burgundy); box-shadow:none;}
+.btn.small{padding:6px 12px; font-size:11px;}
+.form-actions{margin-top:22px; display:flex; gap:12px; justify-content:flex-end;}
+.status-msg{margin-top:14px; font-style:italic; font-size:14px; color:var(--green);}
+
+/* ---------- people directory ---------- */
+.search-wrap{margin-bottom:20px;}
+.search-wrap input{
+  width:100%; padding:12px 16px; border-radius:20px; border:1px solid var(--gold);
+  background:rgba(16,27,51,.6); color:var(--parchment); font-family:'EB Garamond',serif; font-style:italic; font-size:16px;
+}
+.people-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:16px;}
+.person-card{
+  background:var(--navy); border:1px solid rgba(201,162,39,.35); border-radius:4px; padding:16px 10px; text-align:center; cursor:pointer;
+  transition:transform .15s ease;
+}
+.person-card:hover{transform:translateY(-3px); border-color:var(--gold-bright);}
+.avatar{
+  width:64px; height:64px; border-radius:50%; margin:0 auto 10px; object-fit:cover; border:2px solid var(--gold);
+  display:flex; align-items:center; justify-content:center; background:var(--burgundy); font-family:'Cinzel',serif; font-size:22px; color:var(--parchment);
+}
+.person-card .pname{font-family:'Cinzel',serif; font-size:14px; color:var(--parchment);}
+.person-card .pstat{font-size:11px; color:var(--parchment-dark); opacity:.75; margin-top:2px;}
+.house-tag{display:inline-block; margin-top:6px; font-size:10px; letter-spacing:1px; padding:2px 8px; border-radius:10px; font-family:'Cinzel',serif;}
+
+/* ---------- houses ---------- */
+.house-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px;}
+.house-card{border-radius:6px; padding:22px; position:relative; overflow:hidden; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.15);}
+.house-card .hicon{font-size:34px;}
+.house-card h3{margin:8px 0 2px; font-size:20px; color:#fff;}
+.house-card .pts{font-family:'Cinzel Decorative',serif; font-size:30px; margin:10px 0 4px; color:#fff; text-shadow:0 2px 6px rgba(0,0,0,.5);}
+.house-card .members{font-size:12px; opacity:.9; color:#fff; min-height:18px;}
+.house-gryffindor{background:linear-gradient(160deg,#6B1420,#3a0a10);}
+.house-ravenclaw{background:linear-gradient(160deg,#14213D,#0a1226);}
+.house-hufflepuff{background:linear-gradient(160deg,#a67c00,#5c4400);}
+.house-slytherin{background:linear-gradient(160deg,#0F3D2E,#07211a);}
+.cup-board{margin-top:26px;}
+.cup-row{display:flex; align-items:center; gap:14px; padding:12px 16px; border-bottom:1px solid rgba(201,162,39,.25);}
+.cup-rank{font-family:'Cinzel Decorative',serif; font-size:20px; color:var(--gold-bright); width:30px;}
+.cup-bar-wrap{flex:1; background:rgba(255,255,255,.08); border-radius:6px; height:10px; overflow:hidden;}
+.cup-bar{height:100%; border-radius:6px;}
+.house-points-admin{margin-top:20px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+.house-points-admin select,.house-points-admin input{padding:8px; border-radius:2px; border:1px solid var(--gold); background:rgba(16,27,51,.6); color:var(--parchment); font-family:'EB Garamond',serif;}
+
+/* ---------- calendar / map list ---------- */
+.map-list{display:flex; flex-direction:column; gap:10px;}
+.map-item{
+  background:var(--navy); border:1px solid rgba(201,162,39,.3); border-left:4px solid var(--gold);
+  padding:14px 16px; border-radius:3px; cursor:pointer; transition:background .15s;
+}
+.map-item:hover{background:#182543;}
+.map-item .mname{font-family:'Cinzel',serif; color:var(--gold-bright); font-size:15px;}
+.map-item .mmeta{font-size:12px; color:var(--parchment-dark); margin-top:2px;}
+
+/* ---------- chapter view ---------- */
+.chapter-num{font-family:'Cinzel Decorative',serif; font-size:14px; letter-spacing:3px; color:var(--burgundy); opacity:.8;}
+.chapter-title{font-size:clamp(24px,5vw,36px); color:var(--burgundy); margin:4px 0 14px;}
+.chapter-meta{display:flex; flex-wrap:wrap; gap:18px; margin-bottom:16px; font-size:14px;}
+.chapter-meta span{display:flex; align-items:center; gap:6px;}
+.chapter-desc{font-size:16px; line-height:1.6; margin-bottom:20px;}
+.divider{border:none; border-top:1px solid rgba(107,20,32,.3); margin:20px 0;}
+
+/* ---------- person profile ---------- */
+.profile-head{display:flex; gap:20px; align-items:center; flex-wrap:wrap;}
+.profile-head .avatar{width:96px; height:96px; font-size:32px;}
+.profile-stats{display:flex; gap:22px; margin-top:10px; flex-wrap:wrap;}
+.profile-stats div{text-align:center;}
+.profile-stats .num{font-family:'Cinzel Decorative',serif; font-size:24px; color:var(--burgundy);}
+.profile-stats .lab{font-size:11px; letter-spacing:1px; text-transform:uppercase; color:#6b5a3a;}
+
+/* ---------- role picker ---------- */
+.role-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-top:20px; max-width:520px;}
+.role-card{border:1px solid var(--gold); border-radius:4px; padding:20px 14px; text-align:center; cursor:pointer; background:rgba(16,27,51,.5);}
+.role-card:hover{background:rgba(201,162,39,.15);}
+.role-card .ricon{font-size:28px; display:block; margin-bottom:8px;}
+.role-card .rname{font-family:'Cinzel',serif; font-size:14px; color:var(--gold-bright);}
+.role-card .rdesc{font-size:11px; opacity:.7; margin-top:4px;}
+
+/* ---------- toast ---------- */
+#toast{
+  position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); z-index:200;
+  background:var(--gold-bright); color:var(--ink); padding:12px 22px; border-radius:20px;
+  font-family:'Cinzel',serif; font-size:13px; box-shadow:var(--shadow); opacity:0; transition:all .3s ease; pointer-events:none;
+}
+#toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+/* ---------- bottom nav (mobile) ---------- */
+#bottomnav{
+  position:fixed; bottom:0; left:0; right:0; z-index:30;
+  background:linear-gradient(180deg, rgba(16,27,51,.85), rgba(10,7,16,.98));
+  border-top:1px solid var(--gold);
+  display:flex; justify-content:space-around; padding:8px 4px calc(8px + env(safe-area-inset-bottom));
+  backdrop-filter:blur(6px);
+}
+#bottomnav .nav-btn{
+  background:none; border:none; color:var(--parchment-dark); display:flex; flex-direction:column; align-items:center;
+  gap:2px; font-family:'Cinzel',serif; font-size:9px; letter-spacing:.5px; cursor:pointer; padding:4px 6px;
+}
+#bottomnav .nav-btn.active{color:var(--gold-bright);}
+#bottomnav .nav-btn .ic{font-size:19px;}
+
+@media (min-width:760px){
+  #bottomnav{display:none;}
+  main{padding-bottom:60px;}
+}
+@media (max-width:759px){
+  header.hall .role-badge{display:none;}
+}
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-thumb{background:var(--gold); border-radius:4px;}
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<div id="app">
+
+  <!-- OPENING -->
+  <section id="opening">
+    <div class="crest">🦉✨</div>
+    <h1>THE BELAKU CHRONICLES</h1>
+    <div class="sub">U AND I NGO &nbsp;·&nbsp; BELAKU CENTRE</div>
+    <div class="typewriter" id="typewriter"></div>
+    <button class="enter-btn" id="enterBtn">Enter the Wizarding World ✨</button>
+  </section>
+
+  <!-- MAIN APP (hidden until entry) -->
+  <div id="mainShell" class="hidden">
+    <header class="hall">
+      <h1>THE BELAKU CHRONICLES</h1>
+      <div class="tag">U AND I NGO · BELAKU CENTRE</div>
+      <div class="role-badge" id="roleBadge">🪄 Student / Visitor</div>
+    </header>
+
+    <main id="mainContent"></main>
+
+    <div id="toast"></div>
+
+    <nav id="bottomnav">
+      <button class="nav-btn" data-view="hall"><span class="ic">🏰</span>Great Hall</button>
+      <button class="nav-btn" data-view="gallery"><span class="ic">📸</span>Memories</button>
+      <button class="nav-btn" data-view="people"><span class="ic">🧙</span>People</button>
+      <button class="nav-btn" data-view="houses"><span class="ic">🏆</span>House Cup</button>
+      <button class="nav-btn" data-view="add"><span class="ic">📜</span>Add Memory</button>
+    </nav>
+  </div>
+</div>
+
+<script>
+/* ========================================================================
+   THE BELAKU CHRONICLES — magical memory book
+   Data persists via window.storage (shared = visible to everyone using
+   this artifact link — that's intentional, it's a shared community album).
+   ======================================================================== */
+
+const HOUSES = {
+  gryffindor:{name:'Gryffindor', icon:'🦁', cls:'house-gryffindor', bar:'#e0a020'},
+  ravenclaw:{name:'Ravenclaw', icon:'🦅', cls:'house-ravenclaw', bar:'#4a6fd4'},
+  hufflepuff:{name:'Hufflepuff', icon:'🦡', cls:'house-hufflepuff', bar:'#e8c55a'},
+  slytherin:{name:'Slytherin', icon:'🐍', cls:'house-slytherin', bar:'#2e9e6f'},
+};
+const CATEGORIES = ['Festival','Birthday','Volunteer Activity','Workshop','Student Activity','Achievement','Community Event','Other'];
+const ROMAN = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX'];
+
+let state = {
+  role: 'Student / Visitor',
+  people: [],       // {id,name,house,photo}
+  celebrations: [], // {id,name,date,location,description,category,photoIds:[]}
+  photos: [],       // {id,celebrationId,image,peopleIds:[],caption}
+  housePoints: {gryffindor:0, ravenclaw:0, hufflepuff:0, slytherin:0},
+  view: 'hall',
+  pendingUpload: [], // staged photos before saving a new celebration: {tempId,image,peopleIds:[]}
+};
+
+/* ---------------- particles ---------------- */
+function spawnParticles(){
+  const wrap = document.getElementById('particles');
+  for(let i=0;i<28;i++){
+    const m = document.createElement('div');
+    m.className='mote';
+    m.style.left = Math.random()*100+'vw';
+    m.style.bottom = '-10px';
+    m.style.animationDuration = (8+Math.random()*10)+'s';
+    m.style.animationDelay = (Math.random()*10)+'s';
+    m.style.width = m.style.height = (2+Math.random()*2)+'px';
+    wrap.appendChild(m);
+  }
+}
+spawnParticles();
+
+/* ---------------- opening typewriter ---------------- */
+function typewriter(){
+  const text = "Welcome to Belaku Centre, young wizard...";
+  const el = document.getElementById('typewriter');
+  let i=0;
+  const t = setInterval(()=>{
+    el.textContent = text.slice(0,i+1);
+    i++;
+    if(i>=text.length){ clearInterval(t); el.style.borderRight='none'; }
+  }, 55);
+}
+typewriter();
+
+document.getElementById('enterBtn').addEventListener('click', ()=>{
+  document.getElementById('opening').classList.add('hidden');
+  document.getElementById('mainShell').classList.remove('hidden');
+  init();
+});
+
+/* ---------------- storage helpers ---------------- */
+async function loadAll(){
+  showToast('Consulting the magical archives...', 4000);
+  try{
+    const [peopleR, celR, photoR, ptsR] = await Promise.allSettled([
+      window.storage.get('people-list', true),
+      window.storage.get('celebrations-list', true),
+      window.storage.get('photos-list', true),
+      window.storage.get('house-points', true),
+    ]);
+    state.people = peopleR.status==='fulfilled' && peopleR.value ? JSON.parse(peopleR.value.value) : [];
+    state.celebrations = celR.status==='fulfilled' && celR.value ? JSON.parse(celR.value.value) : [];
+    state.photos = photoR.status==='fulfilled' && photoR.value ? JSON.parse(photoR.value.value) : [];
+    state.housePoints = ptsR.status==='fulfilled' && ptsR.value ? JSON.parse(ptsR.value.value) : {gryffindor:0,ravenclaw:0,hufflepuff:0,slytherin:0};
+  }catch(e){
+    console.error(e);
+  }
+}
+async function savePeople(){ await window.storage.set('people-list', JSON.stringify(state.people), true); }
+async function saveCelebrations(){ await window.storage.set('celebrations-list', JSON.stringify(state.celebrations), true); }
+async function savePhotos(){ await window.storage.set('photos-list', JSON.stringify(state.photos), true); }
+async function saveHousePoints(){ await window.storage.set('house-points', JSON.stringify(state.housePoints), true); }
+
+/* ---------------- toast ---------------- */
+let toastTimer;
+function showToast(msg, dur=2200){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), dur);
+}
+
+/* ---------------- init ---------------- */
+async function init(){
+  await loadAll();
+  showToast('Your memory has been retrieved from the archives.', 1800);
+  bindNav();
+  render();
+}
+
+function bindNav(){
+  document.querySelectorAll('#bottomnav .nav-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ navigate(btn.dataset.view); });
+  });
+  document.getElementById('roleBadge').addEventListener('click', renderRolePicker);
+}
+
+function navigate(view, param){
+  state.view = view;
+  state.viewParam = param;
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateBottomNavActive(){
+  document.querySelectorAll('#bottomnav .nav-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.view === state.view);
+  });
+}
+
+const roleIcons = {'Headmaster':'🧙‍♂️','Prefect':'⭐','Student / Visitor':'🪄'};
+function renderRolePicker(){
+  const main = document.getElementById('mainContent');
+  main.innerHTML = `
+    <div class="section-head"><h2>Choose Your Role</h2><span class="back-link" onclick="navigate('hall')">← Back to the Great Hall</span></div>
+    <p style="opacity:.8;font-style:italic;max-width:520px;">This tells the Chronicles what you're here to do — it isn't a password, just a way to show the right tools.</p>
+    <div class="role-grid">
+      <div class="role-card" data-role="Headmaster">
+        <span class="ricon">🧙‍♂️</span>
+        <div class="rname">Headmaster</div>
+        <div class="rdesc">Full control — houses, points, edit everything</div>
+      </div>
+      <div class="role-card" data-role="Prefect">
+        <span class="ricon">⭐</span>
+        <div class="rname">Prefect</div>
+        <div class="rdesc">Upload celebrations, tag people</div>
+      </div>
+      <div class="role-card" data-role="Student / Visitor">
+        <span class="ricon">🪄</span>
+        <div class="rname">Student / Visitor</div>
+        <div class="rdesc">Browse memories and profiles</div>
+      </div>
+    </div>
+  `;
+  main.querySelectorAll('.role-card').forEach(c=>{
+    c.addEventListener('click', ()=>{
+      state.role = c.dataset.role;
+      document.getElementById('roleBadge').textContent = `${roleIcons[state.role]} ${state.role}`;
+      showToast(`Entering as ${state.role}`);
+      navigate('hall');
+    });
+  });
+}
+
+/* ================= RENDER ROUTER ================= */
+function render(){
+  updateBottomNavActive();
+  const main = document.getElementById('mainContent');
+  switch(state.view){
+    case 'hall': return renderHall();
+    case 'chronicles': return renderChronicles();
+    case 'gallery': return renderGallery();
+    case 'people': return renderPeople();
+    case 'personProfile': return renderPersonProfile(state.viewParam);
+    case 'houses': return renderHouses();
+    case 'calendar': return renderCalendar();
+    case 'add': return renderAddMemory();
+    case 'chapter': return renderChapter(state.viewParam);
+    default: return renderHall();
+  }
+}
+
+/* ---------------- Great Hall ---------------- */
+function renderHall(){
+  const main = document.getElementById('mainContent');
+  main.innerHTML = `
+    <div class="section-head"><h2>Welcome to the Great Hall</h2></div>
+    <p style="opacity:.85;font-style:italic;">"${state.celebrations.length} chapters written · ${state.photos.length} memories captured · ${state.people.length} witches and wizards of Belaku."</p>
+    <div class="tiles">
+      <div class="tile" data-v="chronicles"><span class="icon">📜</span><div class="label">The Chronicles</div></div>
+      <div class="tile" data-v="gallery"><span class="icon">📸</span><div class="label">Magical Memories</div></div>
+      <div class="tile" data-v="people"><span class="icon">🧙</span><div class="label">Students &amp; Volunteers</div></div>
+      <div class="tile" data-v="houses"><span class="icon">🏆</span><div class="label">House Cup</div></div>
+      <div class="tile" data-v="calendar"><span class="icon">🗓️</span><div class="label">Hogwarts Calendar</div></div>
+      <div class="tile" data-v="add"><span class="icon">✍️</span><div class="label">Add a Memory</div></div>
+    </div>
+  `;
+  main.querySelectorAll('.tile').forEach(t=>t.addEventListener('click',()=>navigate(t.dataset.v)));
+}
+
+/* ---------------- Chronicles (list of celebrations) ---------------- */
+function renderChronicles(){
+  const main = document.getElementById('mainContent');
+  const sorted = [...state.celebrations].sort((a,b)=> new Date(b.date) - new Date(a.date));
+  main.innerHTML = `
+    <div class="section-head"><h2>📜 The Chronicles</h2><span class="back-link" onclick="navigate('hall')">← Great Hall</span></div>
+    ${sorted.length ? `<div class="map-list">${sorted.map((c,i)=>`
+      <div class="map-item" data-id="${c.id}">
+        <div class="mname">Chapter ${ROMAN[sorted.length-1-i] || (sorted.length-i)} · ${escapeHtml(c.name)}</div>
+        <div class="mmeta">${fmtDate(c.date)} · ${escapeHtml(c.location||'Belaku Centre')} · ${c.category} · ${(c.photoIds||[]).length} photo${(c.photoIds||[]).length===1?'':'s'}</div>
+      </div>`).join('')}</div>`
+      : `<div class="empty-state">This chapter has not yet been written...</div>`}
+  `;
+  main.querySelectorAll('.map-item').forEach(it=>it.addEventListener('click', ()=>navigate('chapter', it.dataset.id)));
+}
+
+/* ---------------- Chapter detail ---------------- */
+function renderChapter(celId){
+  const main = document.getElementById('mainContent');
+  const c = state.celebrations.find(x=>x.id===celId);
+  if(!c){ navigate('chronicles'); return; }
+  const sorted = [...state.celebrations].sort((a,b)=> new Date(a.date) - new Date(b.date));
+  const idx = sorted.findIndex(x=>x.id===celId);
+  const photos = state.photos.filter(p=>p.celebrationId===celId);
+  const peopleNames = uniquePeopleNames(photos);
+  main.innerHTML = `
+    <span class="back-link" onclick="navigate('chronicles')">← The Chronicles</span>
+    <div class="parchment" style="margin-top:14px;">
+      <div class="form-wrap">
+        <div class="chapter-num">CHAPTER ${ROMAN[idx] || (idx+1)}</div>
+        <div class="chapter-title">${escapeHtml(c.name).toUpperCase()}</div>
+        <div class="chapter-meta">
+          <span>📅 ${fmtDate(c.date)}</span>
+          <span>📍 ${escapeHtml(c.location||'Belaku Centre')}</span>
+          <span>👥 ${peopleNames.length} participant${peopleNames.length===1?'':'s'}</span>
+          <span>📸 ${photos.length} memor${photos.length===1?'y':'ies'}</span>
+        </div>
+        ${c.description ? `<div class="chapter-desc">${escapeHtml(c.description)}</div>` : ''}
+        ${peopleNames.length ? `<div style="margin-bottom:14px;"><strong>✨ Highlights — who was there:</strong> ${peopleNames.map(escapeHtml).join(', ')}</div>` : ''}
+        <hr class="divider">
+        <div class="gallery" id="chapterGallery"></div>
+      </div>
+    </div>
+  `;
+  const g = document.getElementById('chapterGallery');
+  g.innerHTML = photos.length ? photos.map(photoCardHtml).join('') : `<div class="empty-state" style="grid-column:1/-1;">No photographs in this chapter yet.</div>`;
+  g.querySelectorAll('.photo-card').forEach(el=>el.addEventListener('click', ()=>openPhotoModal(el.dataset.id)));
+}
+
+function uniquePeopleNames(photos){
+  const ids = new Set();
+  photos.forEach(p=>(p.peopleIds||[]).forEach(id=>ids.add(id)));
+  return [...ids].map(id=> state.people.find(p=>p.id===id)?.name).filter(Boolean);
+}
+
+/* ---------------- Gallery ---------------- */
+function photoCardHtml(p){
+  const cel = state.celebrations.find(c=>c.id===p.celebrationId);
+  const names = (p.peopleIds||[]).map(id=>state.people.find(pp=>pp.id===id)?.name).filter(Boolean);
+  return `
+    <div class="photo-card" data-id="${p.id}">
+      <img src="${p.image}" alt="memory">
+      <div class="meta">
+        <div class="cel">${escapeHtml(cel ? cel.name : 'Untitled Memory')}</div>
+        <div class="date">${cel ? fmtDate(cel.date) : ''}</div>
+        <div class="people">${names.length ? names.map(escapeHtml).join(', ') : 'No one tagged yet'}</div>
+      </div>
+    </div>`;
+}
+
+function renderGallery(){
+  const main = document.getElementById('mainContent');
+  const sorted = [...state.photos].sort((a,b)=>{
+    const ca = state.celebrations.find(c=>c.id===a.celebrationId);
+    const cb = state.celebrations.find(c=>c.id===b.celebrationId);
+    return new Date((cb&&cb.date)||0) - new Date((ca&&ca.date)||0);
+  });
+  main.innerHTML = `
+    <div class="section-head"><h2>📸 Magical Memories</h2><span class="back-link" onclick="navigate('hall')">← Great Hall</span></div>
+    <div class="gallery" id="galleryGrid">${sorted.length ? sorted.map(photoCardHtml).join('') : ''}</div>
+    ${!sorted.length ? `<div class="empty-state">This chapter has not yet been written...</div>` : ''}
+  `;
+  document.querySelectorAll('#galleryGrid .photo-card').forEach(el=>el.addEventListener('click', ()=>openPhotoModal(el.dataset.id)));
+}
+
+function openPhotoModal(photoId){
+  const p = state.photos.find(x=>x.id===photoId);
+  if(!p) return;
+  const cel = state.celebrations.find(c=>c.id===p.celebrationId);
+  const names = (p.peopleIds||[]).map(id=>state.people.find(pp=>pp.id===id)?.name).filter(Boolean);
+  const back = document.createElement('div');
+  back.className='modal-back';
+  back.innerHTML = `
+    <div class="parchment modal-card" style="position:relative;">
+      <div class="modal-close">×</div>
+      <img src="${p.image}" alt="memory">
+      <div class="modal-body">
+        <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:1px;color:#6b5a3a;">A MEMORY FROM THE BELAKU CHRONICLES</div>
+        <h3>${cel ? escapeHtml(cel.name) : 'Untitled Memory'}</h3>
+        <p style="margin:4px 0;"><strong>Date:</strong> ${cel ? fmtDate(cel.date) : '—'}</p>
+        <p style="margin:4px 0;"><strong>Location:</strong> ${cel ? escapeHtml(cel.location||'Belaku Centre') : '—'}</p>
+        <p style="margin:4px 0;"><strong>People:</strong> ${names.length? names.map(escapeHtml).join(', ') : 'No one tagged yet'}</p>
+        ${p.caption ? `<p style="margin-top:10px;font-style:italic;">"${escapeHtml(p.caption)}"</p>` : ''}
+        ${cel ? `<button class="btn secondary small" style="margin-top:14px;" id="viewChapterBtn">Read the full chapter →</button>` : ''}
+      </div>
+    </div>
+  `;
+  document.body.appendChild(back);
+  back.querySelector('.modal-close').addEventListener('click', ()=>back.remove());
+  back.addEventListener('click', (e)=>{ if(e.target===back) back.remove(); });
+  const vb = back.querySelector('#viewChapterBtn');
+  if(vb) vb.addEventListener('click', ()=>{ back.remove(); navigate('chapter', cel.id); });
+}
+
+/* ---------------- People Directory ---------------- */
+function renderPeople(){
+  const main = document.getElementById('mainContent');
+  main.innerHTML = `
+    <div class="section-head"><h2>🧙 Students of Belaku</h2><span class="back-link" onclick="navigate('hall')">← Great Hall</span></div>
+    <div class="search-wrap"><input type="text" id="peopleSearch" placeholder="Search the Marauder's Map..."></div>
+    <div class="people-grid" id="peopleGrid"></div>
+  `;
+  const grid = document.getElementById('peopleGrid');
+  function draw(filter){
+    const list = state.people.filter(p=> p.name.toLowerCase().includes((filter||'').toLowerCase()))
+      .sort((a,b)=>a.name.localeCompare(b.name));
+    grid.innerHTML = list.length ? list.map(personCardHtml).join('') : `<div class="empty-state" style="grid-column:1/-1;">No one found in the archives.</div>`;
+    grid.querySelectorAll('.person-card').forEach(el=>el.addEventListener('click', ()=>navigate('personProfile', el.dataset.id)));
+  }
+  draw('');
+  document.getElementById('peopleSearch').addEventListener('input', (e)=>draw(e.target.value));
+}
+
+function personCardHtml(p){
+  const photoCount = state.photos.filter(ph=>(ph.peopleIds||[]).includes(p.id)).length;
+  const celIds = new Set(state.photos.filter(ph=>(ph.peopleIds||[]).includes(p.id)).map(ph=>ph.celebrationId));
+  const h = p.house ? HOUSES[p.house] : null;
+  return `
+    <div class="person-card" data-id="${p.id}">
+      <div class="avatar">${p.photo ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : initials(p.name)}</div>
+      <div class="pname">${escapeHtml(p.name)}</div>
+      <div class="pstat">${celIds.size} celebration${celIds.size===1?'':'s'} · ${photoCount} photo${photoCount===1?'':'s'}</div>
+      ${h ? `<span class="house-tag" style="background:${h.bar}22;color:${h.bar};border:1px solid ${h.bar}66;">${h.icon} ${h.name}</span>` : ''}
+    </div>`;
+}
+function initials(name){ return (name||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+
+function renderPersonProfile(personId){
+  const main = document.getElementById('mainContent');
+  const p = state.people.find(x=>x.id===personId);
+  if(!p){ navigate('people'); return; }
+  const photos = state.photos.filter(ph=>(ph.peopleIds||[]).includes(p.id));
+  const celIds = [...new Set(photos.map(ph=>ph.celebrationId))];
+  const h = p.house ? HOUSES[p.house] : null;
+  main.innerHTML = `
+    <span class="back-link" onclick="navigate('people')">← Students of Belaku</span>
+    <div class="parchment" style="margin-top:14px;">
+      <div class="form-wrap">
+        <div class="profile-head">
+          <div class="avatar" style="width:96px;height:96px;font-size:32px;">${p.photo ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : initials(p.name)}</div>
+          <div>
+            <h2 style="margin:0;color:var(--burgundy);">${escapeHtml(p.name)}</h2>
+            ${h ? `<span class="house-tag" style="background:${h.bar}22;color:${h.bar};border:1px solid ${h.bar}66;">${h.icon} ${h.name}</span>` : '<span style="opacity:.6;font-style:italic;">Not yet sorted</span>'}
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div><div class="num">${celIds.length}</div><div class="lab">Celebrations</div></div>
+          <div><div class="num">${photos.length}</div><div class="lab">Photographs</div></div>
+        </div>
+        <hr class="divider">
+        <strong>Events participated in:</strong>
+        <div class="map-list" style="margin-top:10px;">
+          ${celIds.map(cid=>{ const c=state.celebrations.find(x=>x.id===cid); return c ? `<div class="map-item" data-id="${c.id}"><div class="mname">${escapeHtml(c.name)}</div><div class="mmeta">${fmtDate(c.date)}</div></div>` : ''; }).join('') || `<div class="empty-state">No events yet.</div>`}
+        </div>
+        <hr class="divider">
+        <strong>Photo history:</strong>
+        <div class="gallery" style="margin-top:10px;">
+          ${photos.length ? photos.map(photoCardHtml).join('') : `<div class="empty-state" style="grid-column:1/-1;">No photographs yet.</div>`}
+        </div>
+      </div>
+    </div>
+  `;
+  main.querySelectorAll('.map-item').forEach(it=>it.addEventListener('click', ()=>navigate('chapter', it.dataset.id)));
+  main.querySelectorAll('.photo-card').forEach(el=>el.addEventListener('click', ()=>openPhotoModal(el.dataset.id)));
+}
+
+/* ---------------- Houses / House Cup ---------------- */
+function renderHouses(){
+  const main = document.getElementById('mainContent');
+  const ranked = Object.keys(HOUSES).sort((a,b)=> (state.housePoints[b]||0)-(state.housePoints[a]||0));
+  const maxPts = Math.max(1, ...Object.values(state.housePoints));
+  main.innerHTML = `
+    <div class="section-head"><h2>🏆 The House Cup</h2><span class="back-link" onclick="navigate('hall')">← Great Hall</span></div>
+    <div class="house-grid">
+      ${Object.entries(HOUSES).map(([key,h])=>{
+        const members = state.people.filter(p=>p.house===key);
+        return `
+        <div class="house-card ${h.cls}">
+          <div class="hicon">${h.icon}</div>
+          <h3>${h.name}</h3>
+          <div class="pts">${state.housePoints[key]||0} pts</div>
+          <div class="members">${members.length} member${members.length===1?'':'s'}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="cup-board parchment">
+      <div class="form-wrap">
+        <h3 style="color:var(--burgundy);margin-top:0;">Live Rankings</h3>
+        ${ranked.map((key,i)=>{
+          const h = HOUSES[key];
+          const pts = state.housePoints[key]||0;
+          return `<div class="cup-row">
+            <div class="cup-rank">${i+1}</div>
+            <div style="width:140px;font-family:'Cinzel',serif;color:${h.bar};">${h.icon} ${h.name}</div>
+            <div class="cup-bar-wrap"><div class="cup-bar" style="width:${(pts/maxPts*100)||0}%;background:${h.bar};"></div></div>
+            <div style="width:50px;text-align:right;color:var(--ink);font-weight:600;">${pts}</div>
+          </div>`;
+        }).join('')}
+        ${state.role==='Headmaster' ? `
+        <div class="house-points-admin">
+          <select id="housePickSelect">${Object.entries(HOUSES).map(([k,h])=>`<option value="${k}">${h.icon} ${h.name}</option>`).join('')}</select>
+          <input type="text" id="housePtsInput" placeholder="+10 or -5" style="width:100px;">
+          <button class="btn small" id="applyPtsBtn">Award Points</button>
+        </div>` : ''}
+      </div>
+    </div>
+  `;
+  if(state.role==='Headmaster'){
+    document.getElementById('applyPtsBtn').addEventListener('click', async ()=>{
+      const key = document.getElementById('housePickSelect').value;
+      const val = parseInt(document.getElementById('housePtsInput').value, 10);
+      if(isNaN(val)) { showToast('Enter a number of points, e.g. 10 or -5'); return; }
+      state.housePoints[key] = (state.housePoints[key]||0) + val;
+      await saveHousePoints();
+      showToast(`${HOUSES[key].name} ${val>=0?'gains':'loses'} ${Math.abs(val)} points!`);
+      renderHouses();
+    });
+  }
+}
+
+/* ---------------- Calendar / Marauder's Map ---------------- */
+function renderCalendar(){
+  const main = document.getElementById('mainContent');
+  const now = new Date();
+  const upcoming = state.celebrations.filter(c=>new Date(c.date) >= now).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const past = state.celebrations.filter(c=>new Date(c.date) < now).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  main.innerHTML = `
+    <div class="section-head"><h2>🗓️ The Hogwarts Calendar</h2><span class="back-link" onclick="navigate('hall')">← Great Hall</span></div>
+    <p style="opacity:.75;font-style:italic;margin-top:-6px;">🗺️ Belaku Centre, as seen on the Marauder's Map</p>
+    <h3 class="serif-head" style="color:var(--gold-bright);">Upcoming</h3>
+    <div class="map-list" id="upcomingList">${upcoming.length ? upcoming.map(c=>`<div class="map-item" data-id="${c.id}"><div class="mname">→ ${escapeHtml(c.name)}</div><div class="mmeta">${fmtDate(c.date)} · ${escapeHtml(c.location||'Belaku Centre')}</div></div>`).join('') : `<div class="empty-state">No events on the horizon yet.</div>`}</div>
+    <h3 class="serif-head" style="color:var(--gold-bright);margin-top:26px;">Previous</h3>
+    <div class="map-list" id="pastList">${past.length ? past.map(c=>`<div class="map-item" data-id="${c.id}"><div class="mname">→ ${escapeHtml(c.name)}</div><div class="mmeta">${fmtDate(c.date)} · ${escapeHtml(c.location||'Belaku Centre')}</div></div>`).join('') : `<div class="empty-state">This chapter has not yet been written...</div>`}</div>
+  `;
+  main.querySelectorAll('.map-item').forEach(it=>it.addEventListener('click', ()=>navigate('chapter', it.dataset.id)));
+}
+
+/* ---------------- Add Memory ---------------- */
+function renderAddMemory(){
+  const main = document.getElementById('mainContent');
+  if(state.role === 'Student / Visitor'){
+    main.innerHTML = `
+      <div class="section-head"><h2>✍️ Add a Memory</h2><span class="back-link" onclick="navigate('hall')">← Great Hall</span></div>
+      <div class="empty-state">Only Prefects and the Headmaster may add memories to the Chronicle.<br><br>
+      <button class="btn secondary small" onclick="renderRolePicker()">Change your role</button></div>
+    `;
+    return;
+  }
+  state.pendingUpload = [];
+  main.innerHTML = `
+    <div class="section-head"><h2>✍️ Add a Memory</h2><span class="back-link" onclick="navigate('hall')">← Great Hall</span></div>
+    <div class="parchment">
+      <div class="form-wrap">
+        <label>Celebration Name</label>
+        <input type="text" id="fName" placeholder="e.g. Janmashtami 2026">
+
+        <label>Date</label>
+        <input type="date" id="fDate">
+
+        <label>Location</label>
+        <input type="text" id="fLocation" placeholder="Belaku Centre" value="Belaku Centre">
+
+        <label>Description</label>
+        <textarea id="fDesc" placeholder="What happened at this celebration?"></textarea>
+
+        <label>Category</label>
+        <select id="fCategory">${CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join('')}</select>
+
+        <label>Magical Photo Upload</label>
+        <div class="file-drop" id="fileDrop">📷 Tap to choose photographs, or drop them here</div>
+        <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
+
+        <div class="photo-stage" id="photoStage"></div>
+
+        <div class="status-msg" id="statusMsg"></div>
+        <div class="form-actions">
+          <button class="btn secondary" onclick="navigate('hall')">Cancel</button>
+          <button class="btn" id="saveMemoryBtn">Add to the Chronicle</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('fileDrop').addEventListener('click', ()=>document.getElementById('fileInput').click());
+  document.getElementById('fileInput').addEventListener('change', handleFiles);
+  document.getElementById('saveMemoryBtn').addEventListener('click', saveMemory);
+}
+
+function handleFiles(e){
+  const files = Array.from(e.target.files || []);
+  files.forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      state.pendingUpload.push({ tempId: 'tmp_'+Math.random().toString(36).slice(2), image: reader.result, peopleIds: [] });
+      drawPhotoStage();
+    };
+    reader.readAsDataURL(file);
+  });
+  e.target.value = '';
+}
+
+function drawPhotoStage(){
+  const stage = document.getElementById('photoStage');
+  if(!stage) return;
+  stage.innerHTML = state.pendingUpload.map(item=>`
+    <div class="stage-item" data-tid="${item.tempId}">
+      <img src="${item.image}">
+      <div class="stage-body">
+        <div class="q">Who is in this photograph?</div>
+        <div class="chip-row" id="chips-${item.tempId}">
+          ${item.peopleIds.map(pid=>{
+            const person = state.people.find(p=>p.id===pid);
+            return person ? `<span class="chip">${escapeHtml(person.name)}<button data-tid="${item.tempId}" data-pid="${pid}" class="rm-chip">×</button></span>` : '';
+          }).join('')}
+        </div>
+        <div class="suggest-list">
+          <div class="tag-input-row">
+            <input type="text" class="tag-input" data-tid="${item.tempId}" placeholder="Harry, Hermione, Ron...">
+            <button class="btn small addperson-btn" data-tid="${item.tempId}">+ Add Person</button>
+          </div>
+          <div class="suggest-box hidden" data-tid="${item.tempId}"></div>
+        </div>
+        <button class="btn secondary small remove-photo-btn" data-tid="${item.tempId}" style="margin-top:8px;">Remove photo</button>
+      </div>
+    </div>
+  `).join('');
+
+  stage.querySelectorAll('.rm-chip').forEach(b=>b.addEventListener('click', ()=>{
+    const item = state.pendingUpload.find(i=>i.tempId===b.dataset.tid);
+    item.peopleIds = item.peopleIds.filter(id=>id!==b.dataset.pid);
+    drawPhotoStage();
+  }));
+  stage.querySelectorAll('.remove-photo-btn').forEach(b=>b.addEventListener('click', ()=>{
+    state.pendingUpload = state.pendingUpload.filter(i=>i.tempId!==b.dataset.tid);
+    drawPhotoStage();
+  }));
+  stage.querySelectorAll('.tag-input').forEach(inp=>{
+    inp.addEventListener('input', ()=>showSuggestions(inp));
+    inp.addEventListener('focus', ()=>showSuggestions(inp));
+    inp.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); addPersonToPhoto(inp.dataset.tid, inp.value.trim()); inp.value=''; hideSuggestions(inp.dataset.tid);} });
+  });
+  stage.querySelectorAll('.addperson-btn').forEach(b=>b.addEventListener('click', ()=>{
+    const inp = stage.querySelector(`.tag-input[data-tid="${b.dataset.tid}"]`);
+    addPersonToPhoto(b.dataset.tid, inp.value.trim());
+    inp.value=''; hideSuggestions(b.dataset.tid);
+  }));
+}
+
+function showSuggestions(inp){
+  const tid = inp.dataset.tid;
+  const box = document.querySelector(`.suggest-box[data-tid="${tid}"]`);
+  const val = inp.value.trim().toLowerCase();
+  if(!val){ box.classList.add('hidden'); box.innerHTML=''; return; }
+  const item = state.pendingUpload.find(i=>i.tempId===tid);
+  const matches = state.people.filter(p=> p.name.toLowerCase().includes(val) && !item.peopleIds.includes(p.id)).slice(0,6);
+  if(!matches.length){ box.classList.add('hidden'); box.innerHTML=''; return; }
+  box.classList.remove('hidden');
+  box.innerHTML = matches.map(m=>`<div data-pid="${m.id}" data-tid="${tid}">${escapeHtml(m.name)}</div>`).join('');
+  box.querySelectorAll('div').forEach(d=>d.addEventListener('click', ()=>{
+    const it = state.pendingUpload.find(i=>i.tempId===d.dataset.tid);
+    if(!it.peopleIds.includes(d.dataset.pid)) it.peopleIds.push(d.dataset.pid);
+    drawPhotoStage();
+  }));
+}
+function hideSuggestions(tid){
+  const box = document.querySelector(`.suggest-box[data-tid="${tid}"]`);
+  if(box){ box.classList.add('hidden'); }
+}
+
+function addPersonToPhoto(tid, name){
+  if(!name) return;
+  const item = state.pendingUpload.find(i=>i.tempId===tid);
+  if(!item) return;
+  let person = state.people.find(p=>p.name.toLowerCase() === name.toLowerCase());
+  if(!person){
+    person = { id: 'p_'+Math.random().toString(36).slice(2), name, house:null, photo:null };
+    state.people.push(person);
+  }
+  if(!item.peopleIds.includes(person.id)) item.peopleIds.push(person.id);
+  drawPhotoStage();
+}
+
+async function saveMemory(){
+  const name = document.getElementById('fName').value.trim();
+  const date = document.getElementById('fDate').value;
+  const location = document.getElementById('fLocation').value.trim();
+  const description = document.getElementById('fDesc').value.trim();
+  const category = document.getElementById('fCategory').value;
+  const statusEl = document.getElementById('statusMsg');
+
+  if(!name || !date){
+    statusEl.textContent = 'A memory needs at least a name and a date.';
+    statusEl.style.color = 'var(--burgundy)';
+    return;
+  }
+
+  statusEl.style.color = 'var(--green)';
+  statusEl.textContent = 'Adding your memory to the Hogwarts archives...';
+
+  const celId = 'c_'+Math.random().toString(36).slice(2);
+  const photoIds = [];
+  state.pendingUpload.forEach(item=>{
+    const pid = 'ph_'+Math.random().toString(36).slice(2);
+    state.photos.push({ id: pid, celebrationId: celId, image: item.image, peopleIds: item.peopleIds, caption:'' });
+    photoIds.push(pid);
+  });
+  state.celebrations.push({ id: celId, name, date, location, description, category, photoIds });
+
+  try{
+    await Promise.all([savePeople(), saveCelebrations(), savePhotos()]);
+    statusEl.textContent = 'Your memory has been added to the Chronicle.';
+    showToast('✨ Your memory has been added to the Chronicle.');
+    setTimeout(()=>navigate('chapter', celId), 700);
+  }catch(e){
+    console.error(e);
+    statusEl.style.color = 'var(--burgundy)';
+    statusEl.textContent = 'The archives resisted that spell — please try again.';
+  }
+}
+
+/* ---------------- utils ---------------- */
+function fmtDate(d){
+  if(!d) return '';
+  const dt = new Date(d);
+  if(isNaN(dt)) return d;
+  return dt.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+}
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+</script>
+</body>
+</html>
